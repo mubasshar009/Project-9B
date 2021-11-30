@@ -1,6 +1,6 @@
 import {Response, Request } from 'miragejs';
 import { handleErros } from '../server';
-import { User } from '../../../interfaces/user.interface';
+import  User  from '../../../interfaces/user.interface';
 
 import { randomBytes } from 'crypto';
 
