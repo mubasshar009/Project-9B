@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { boolean } from "yup";
 
 interface AuthState {
   token: string | null;
@@ -29,3 +28,5 @@ const auth = createSlice({
       },
     },
   });
+export const { saveToken, clearToken, setAuthState } = auth.actions;
+export default auth.reducer;
