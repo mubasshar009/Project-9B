@@ -1,5 +1,5 @@
 import React, { FC,   lazy, Suspense} from "react";
-import { BrowserRouter as Router, Route,Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route,Routes } from "react-router-dom";
 import { useSelector} from 'react-redux'
 import { RootState } from "../rootReducers";
 
@@ -13,14 +13,19 @@ const App:FC =  ()=> {
     (state:RootState) => state.auth.isAuthenticated
   )
   return (
+    
     <Router>
-      <Switch>
+      <React.Fragment>
+      <Routes>
+        <>
         <Route path="/">
           <Suspense fallback={<p>Loading...</p>}>
             { isLoggedIn ? <Home /> : <Auth />}
           </Suspense>
         </Route>
-      </Switch>
+        </>
+      </Routes>
+      </React.Fragment>
     </Router>
   );
 }
