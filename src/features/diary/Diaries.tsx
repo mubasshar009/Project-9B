@@ -44,52 +44,37 @@ const Diaries: FC = () => {
       confirmButtonText: 'Next &rarr;',
       showCancelButton: true,
       progressSteps: ['1', '2'],
-    }).fire(
-      {
+      
+    }).fire({
         titleText: 'Diary title',
         input: 'text',
-      },
-    //   [
-    //   {
-    //     titleText: 'Diary title',
-    //     input: 'text',
-    //   },
-    //   {
-    //     titleText: 'Private or public diary?',
-    //     input: 'radio',
-    //     inputOptions: {
-    //       private: 'Private',
-    //       public: 'Public',
-    //     },
-    //     inputValue: 'private',
-    //   },
-    // ]
-    )
-    if (result.value) {
-      const { value } = result;
-      const { diary, user: _user } = await http.post<
-        Partial<Diary>,
-        { diary: Diary; user: User }
-      >('/diaries/', {
-        title: value[0],
-        type: value[1],
-        userId: user?.id,
-      });
-      if (diary && user) {
-        dispatch(addDiary([diary] as Diary[]));
-        dispatch(addDiary([diary] as Diary[]));
-        dispatch(setUser(_user));
-
-        return MySwal.fire({
-          titleText: 'All done!',
-          confirmButtonText: 'OK!',
+      })
+      if (result.value) {
+        const { value } = result;
+        const { diary, user: _user } = await http.post<
+          Partial<Diary>,
+          { diary: Diary; user: User }
+        >('/diaries/', {
+          title: value[0],
+          type: value[1],
+          userId: user?.id,
         });
+        if (diary && user) {
+          dispatch(addDiary([diary] as Diary[]));
+          dispatch(addDiary([diary] as Diary[]));
+          dispatch(setUser(_user));
+  
+          return Swal.fire({
+            titleText: 'All done!',
+            confirmButtonText: 'OK!',
+          });
+        }
       }
-    }
-    MySwal.fire({
-      titleText: 'Cancelled',
-    });
-  };
+      Swal.fire({
+        titleText: 'Cancelled',
+      });
+    };
+  
 
   return (
     <div style={{ padding: '1em 0.4em' }}>
