@@ -12,6 +12,9 @@ import { Route, Routes } from 'react-router-dom';
 import DiaryEntriesList from './DiaryEntriesList';
 import { useAppDispatch } from '../../store';
 import dayjs from 'dayjs';
+import withReactContent from 'sweetalert2-react-content'
+
+const MySwal = withReactContent(Swal)
 
 const Diaries: FC = () => {
   const dispatch = useAppDispatch();
@@ -36,26 +39,32 @@ const Diaries: FC = () => {
   }, [dispatch, user]);
 
   const createDiary = async () => {
-    const result = (await ( Swal as any).mixin({
+    const result = await MySwal.mixin({
       input: 'text',
       confirmButtonText: 'Next &rarr;',
       showCancelButton: true,
       progressSteps: ['1', '2'],
-    }).queue([
+    }).fire(
       {
         titleText: 'Diary title',
         input: 'text',
       },
-      {
-        titleText: 'Private or public diary?',
-        input: 'radio',
-        inputOptions: {
-          private: 'Private',
-          public: 'Public',
-        },
-        inputValue: 'private',
-      },
-    ])) as any;
+    //   [
+    //   {
+    //     titleText: 'Diary title',
+    //     input: 'text',
+    //   },
+    //   {
+    //     titleText: 'Private or public diary?',
+    //     input: 'radio',
+    //     inputOptions: {
+    //       private: 'Private',
+    //       public: 'Public',
+    //     },
+    //     inputValue: 'private',
+    //   },
+    // ]
+    )
     if (result.value) {
       const { value } = result;
       const { diary, user: _user } = await http.post<
@@ -71,13 +80,13 @@ const Diaries: FC = () => {
         dispatch(addDiary([diary] as Diary[]));
         dispatch(setUser(_user));
 
-        return Swal.fire({
+        return MySwal.fire({
           titleText: 'All done!',
           confirmButtonText: 'OK!',
         });
       }
     }
-    Swal.fire({
+    MySwal.fire({
       titleText: 'Cancelled',
     });
   };
@@ -85,14 +94,19 @@ const Diaries: FC = () => {
   return (
     <div style={{ padding: '1em 0.4em' }}>
       <Routes>
-        <Route path="/diary/:id">
-          <DiaryEntriesList />
+        <Route path="/diary/:id" element={<DiaryEntriesList />}>
+          
         </Route>
-        <Route path="/">
+        <Route path="/" element={
+          <>
           <button onClick={createDiary}>Create New</button>
           {diaries.map((diary, idx) => (
             <DiaryTile key={idx} diary={diary} />
           ))}
+          </>
+          }>
+          
+          
         </Route>
       </Routes>
     </div>

@@ -13,20 +13,21 @@ const App:FC =  ()=> {
     (state:RootState) => state.auth.isAuthenticated
   )
   return (
-    
+    <React.Suspense fallback={<p>Loading ....</p>}>
     <Router>
-      <React.Fragment>
+      
       <Routes>
-        <>
-        <Route path="/">
-          <Suspense fallback={<p>Loading...</p>}>
-            { isLoggedIn ? <Home /> : <Auth />}
-          </Suspense>
+        
+        <Route path="/" element={ isLoggedIn ? <Home /> : <Auth />}>
+          
+          
+          
         </Route>
-        </>
+        
       </Routes>
-      </React.Fragment>
+      
     </Router>
+    </React.Suspense>
   );
 }
 

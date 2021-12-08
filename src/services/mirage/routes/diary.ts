@@ -3,7 +3,7 @@ import { Request, Response } from "miragejs";
 import { Diary } from "../../../interfaces/diary.interface";
 import { Entry } from "../../../interfaces/entry.interface";
 import { User } from "../../../interfaces/user.interface";
-import { handleErros } from "../server";
+import { handleErrors } from "../server";
 
 export const create = (
   schema: any,
@@ -15,7 +15,7 @@ export const create = (
     ) as Partial<Diary>;
     const exUser = schema.users.findBy({ id: userId });
     if (!exUser) {
-      return handleErros(null, "No Such User Exists. ");
+      return handleErrors(null, "No Such User Exists. ");
     }
     const now = dayjs().format();
     const diary = exUser.createDiary({
@@ -31,7 +31,7 @@ export const create = (
       diary: diary.attrs,
     };
   } catch (error) {
-    return handleErros(error, "Failed To Create Diary");
+    return handleErrors(error, "Failed To Create Diary");
   }
 };
 export const updateDiary = (schema: any, req: Request): Diary | Response => {
@@ -45,7 +45,7 @@ export const updateDiary = (schema: any, req: Request): Diary | Response => {
     });
     return diary.attrs as Diary;
   } catch (error) {
-    return handleErros(error, "Failed to Update Diary");
+    return handleErrors(error, "Failed to Update Diary");
   }
 };
 export const getDiaries = (schema: any, req: Request): Diary[] | Response => {
@@ -53,7 +53,7 @@ export const getDiaries = (schema: any, req: Request): Diary[] | Response => {
     const user = schema.users.find(req.params.id);
     return user.diary as Diary[];
   } catch (error) {
-    return handleErros(null, "Could Not Get     user Diaries");
+    return handleErrors(null, "Could Not Get     user Diaries");
   }
 };
 
@@ -79,7 +79,7 @@ export const addEntry = (schema:any,req:Request) :{ diary:Diary;entry:Entry} | R
             entry:entry.attrs,
         }
     }catch(error){
-        return handleErros(error ,'Failed to save Entry' )
+        return handleErrors(error ,'Failed to save Entry' )
     }
 };
 export const getEntries = (schema:any,req:Request):{entries:Entry[] } | Response => {
@@ -87,7 +87,7 @@ export const getEntries = (schema:any,req:Request):{entries:Entry[] } | Response
         const diary = schema.diaries.find(req.params.id);
         return diary.entry;
     }catch(error){
-        return handleErros(error , 'Failed To get Diary Entries')  
+        return handleErrors(error , 'Failed To get Diary Entries')  
     }
 }
 
@@ -103,7 +103,7 @@ export const upateEntry = (schema:any,req:Request) :Entry | Response => {
     return entry.attrs as Entry;
     }
     catch(error) {
-        return handleErros(error,'Failed To Update Entry')
+        return handleErrors(error,'Failed To Update Entry')
     }
 
 }
